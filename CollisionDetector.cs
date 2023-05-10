@@ -73,4 +73,28 @@ namespace StarterAssets
         }
 
 
+        private void Update()
+        {
+            time_to_die -= Time.deltaTime;
+            if (time_to_die <= 0 && cubefloat)
+            {
+                turrentController.hit_detected = true;
+                turrentController.hit_position = transform.position;
+                cubefloat = false;
+               
+                DestructedCube();
+                AudioSource.PlayClipAtPoint(clip[0], transform.position);
+                gameObject.SetActive(false);
+                Invoke("Object_Release", 3f);
+
+            }
+
+
+        }
+        private void Object_Release()
+        {
+            m_pool?.Release(gameObject);
+        }
+        
+    }
 }
