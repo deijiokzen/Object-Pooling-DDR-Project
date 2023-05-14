@@ -95,6 +95,27 @@ namespace StarterAssets
         {
             m_pool?.Release(gameObject);
         }
-        
-    }
+        private void Reflector()
+        {
+
+            if (hit.transform != null ? hit.transform.name.StartsWith("Prism") : false && Mathf.Abs(hit.normal.y) < .5)
+            {
+                var previousDirection = ray.direction;
+                previousDirection.y = 0;
+                var xzNormal = hit.normal;
+                xzNormal.y = 0;
+                //var direction = Vector3.Reflect(previousDirection, xzNormal);
+                ray = new Ray(hit.point, Vector3.Reflect(previousDirection, xzNormal));
+
+            }
+            else
+            {
+                ray = new Ray(hit.point, Vector3.Reflect(ray.direction, hit.normal));
+
+            }
+            rb.velocity = ray.direction * minVelocity;
+
+
+        }
+
 }
