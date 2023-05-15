@@ -23,19 +23,44 @@ namespace StarterAssets
         float timer;
         bool bullet_lag;
         [SerializeField]
-        private float LagTime=1f;
+        private float LagTime = 1f;
         //private static bool hasHit = false;
 
         void Start()
         {
             CollisionDetector.game_obj = gun_obj.gameObject;
-            m_projectilePool = new ObjectPool<GameObject>(createFunc, actionOnGet, actionOnRelease, actionOnDestroy, maxSize:5);
+            m_projectilePool = new ObjectPool<GameObject>(createFunc, actionOnGet, actionOnRelease, actionOnDestroy, maxSize: 5);
             //transform.forward = transform.parent.forward;
             projectile.GetComponent<Rigidbody>().useGravity = false;
             fireAction.Enable();
             bullet_lag = false;
             timer = 0f;
-           // this.transform.forward = transform.parent.forward;
+            // this.transform.forward = transform.parent.forward;
         }
+
+        private GameObject createFunc()
+        {
+            GameObject obj = Instantiate(projectile, gun_obj.position, gun_obj.rotation);
+            obj.GetComponent<CollisionDetector>().SetPool(m_projectilePool);
+            obj.layer = 2;
+            return obj;
+        }
+
+        private void actionOnDestroy(GameObject obj)
+        {
+            Destroy(obj.gameObject);
+        }
+
+        private void actionOnRelease(GameObject obj)
+        {
+            obj.gameObject.SetActive(false);
+        }
+
+        private void actionOnGet(GameObject obj)
+        {
+            obj.gameObject.SetActive(true);
+            obj.transform.position = transform.parent.position;
+        }
+    }
 
 }
