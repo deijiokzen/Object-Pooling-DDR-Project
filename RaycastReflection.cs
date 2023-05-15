@@ -37,6 +37,26 @@ namespace StarterAssets
 
 		}
 
+		// Update is called once per frame
+		void Update()
+		{
+			if (fireAction.IsPressed())
+            {
+
+				Fire();
+				//temp = playercontroller;
+
+				//Temp_Position = playercontroller.gameObject.transform.position;
+				//Temp_Forward = playercontroller.gameObject.transform.forward;
+			}
+			if(fireAction2.IsPressed())
+            {
+				lineRenderer.enabled = false;
+            }
+
+
+		}
+
 
 
 }
