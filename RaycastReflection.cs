@@ -57,6 +57,46 @@ namespace StarterAssets
 
 		}
 
+		void Fire()
+		{
+			lineRenderer.enabled = true;
+			ray = new Ray(gun_obj.position, gun_obj.forward); 
+			//lineRenderer.material = a[0];
+			//lineRenderer.material.color = Color.HSVToRGB(1f, 1f, 1f); 
+			lineRenderer.positionCount = 1;
+			lineRenderer.SetPosition(0, gun_obj.position + gun_obj.forward * gun_obj.localScale.x);
+			float remainingLength = maxLength;
+
+			for (int i = 0; i < reflections; i++)
+			{
+				if (Physics.Raycast(ray.origin, ray.direction, out hit, remainingLength, ~ignoreLayermask))
+				{
+					lineRenderer.positionCount += 1;
+					lineRenderer.SetPosition(lineRenderer.positionCount - 1, hit.point);
+					remainingLength -= Vector3.Distance(ray.origin, hit.point);
+
+
+
+					if ((false)/*Mathf.Abs(hit.normal.y) < .5*/)
+					{
+						var previousDirection = ray.direction;
+						previousDirection.y = 0;
+						var xzNormal = hit.normal;
+						xzNormal.y = 0;
+						//var direction = Vector3.Reflect(previousDirection, xzNormal);
+						ray = new Ray(hit.point, Vector3.Reflect(previousDirection, xzNormal));
+					}
+					else
+					{
+						ray = new Ray(hit.point, Vector3.Reflect(ray.direction, hit.normal));
+					}
+
+				}
+				
+			}
+		}
+		
+	}
 
 
 }
