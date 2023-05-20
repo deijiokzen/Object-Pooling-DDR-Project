@@ -69,13 +69,21 @@ namespace StarterAssets
         {
             if(fireAction.IsPressed())
             {
-                
+                if(bullet_lag)
+                {
+                        //Debug.Log($"Time: {Time.time} - {timer} = {Time.time-timer}");
+                        bullet_lag = false;
+
+                }
+                else
+                {
                     AudioSource.PlayClipAtPoint(clip[0], transform.position);
                     
                     createFunc();
                     //Debug.Log($"Bullet Lag Activated.");
                     bullet_lag = true;
                     timer = Time.time;
+                }
             }
           
 
