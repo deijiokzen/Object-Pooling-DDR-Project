@@ -71,8 +71,11 @@ namespace StarterAssets
             {
                 if(bullet_lag)
                 {
+                    if (Time.time-timer>= LagTime)
+                    {
                         //Debug.Log($"Time: {Time.time} - {timer} = {Time.time-timer}");
                         bullet_lag = false;
+                    }
 
                 }
                 else
