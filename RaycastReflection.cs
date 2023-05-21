@@ -91,6 +91,39 @@ namespace StarterAssets
 						ray = new Ray(hit.point, Vector3.Reflect(ray.direction, hit.normal));
 					}
 
+					if (hit.collider.tag == "LockWall")
+					{
+						//lineRenderer.material = a[1];
+						//if(lineRenderer.positionCount ==2 )
+						lineRenderer.material = Material_Array[3];
+						break;
+					}
+					//if (hit.collider.tag == "ObjectActualizer")
+					//{
+					//	lineRenderer.material = a[1];
+					//	break;
+					//}
+					if(hit.collider.CompareTag ("ObjectActualizer"))
+                    {
+						lineRenderer.material = Material_Array[2];
+						continue;
+
+					}
+					if (hit.collider.CompareTag("Mirror"))
+					{
+
+						if (lineRenderer.positionCount == 2)
+							lineRenderer.material = Material_Array[1];
+						continue;
+					}
+
+
+					else
+                    {
+						if (lineRenderer.positionCount == 2)
+							lineRenderer.material=Material_Array[0];
+						break;
+                    }
 				}
 				
 			}
