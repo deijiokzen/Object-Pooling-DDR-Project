@@ -25,7 +25,6 @@ namespace StarterAssets
         [SerializeField]
         private float LagTime=1f;
         //private static bool hasHit = false;
-
         void Start()
         {
             CollisionDetector.game_obj = gun_obj.gameObject;
@@ -88,10 +87,52 @@ namespace StarterAssets
                     timer = Time.time;
                 }
             }
+            //if(bullet_lag)
+            //{
+            //    if(timer>=2f)
+            //    {
+            //        timer = 0f;
+            //        bullet_lag = false;
+            //    }
+            //    else
+            //    {
+            //        timer += Time.deltaTime;
+            //    }
+            //}
+            //else
+            //{
+            
+            //    bullet_lag = true;
+            //}
           
 
 
         }
-        
+        //void Fire()
+        //{
+        //    createFunc();
+            
+        //    //GameObject newObj= Instantiate(projectile, transform.parent.position, transform.parent.rotation);
+        //    //newObj.transform.parent = gameObject.transform;
+        //    //newObj.layer = 2;
+        //    //newObj.AddComponent<CollisionDetector>();
+
+        //    //newObj.GetComponent<Rigidbody>().AddForce(transform.parent.forward *ForceAmount);
+
+        //}
+
+        //void OnCollisionEnter(Collision collision)
+        //{
+        //    Collider myCollider = collision.GetContact(0).thisCollider;
+        //    //hasHit = true;
+
+        //}
+
+        //public void CollisionDetected(CollisionDetector childScript)
+        //{
+        //    Debug.Log("Collided WITH PARENT");
+
+        //    hasHit = true;
+        //}
     }
 }
