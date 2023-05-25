@@ -9,7 +9,7 @@ namespace StarterAssets
 
 	public class RaycastReflection : MonoBehaviour
 	{
-
+	
 		public int reflections;
 		public float maxLength;
 
@@ -24,6 +24,11 @@ namespace StarterAssets
 		public LayerMask ignoreLayermask;
 		public Material[] Material_Array;
 		//private Vector3 Temp_Position, Temp_Forward;
+		public static Vector3 position_update;
+		public static Vector3 direction_update;
+		//private Vector3 prevPoint;
+		Vector3 targetPoint;
+
 		void Start()
 		{
 			//RaycastHit screenRayInfo;
@@ -40,7 +45,17 @@ namespace StarterAssets
 		// Update is called once per frame
 		void Update()
 		{
-			if (fireAction.IsPressed())
+			Ray ray2 = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
+			RaycastHit hit;
+			// Check whether your are pointing to something so as to adjust the direction
+			if (Physics.Raycast(ray2, out hit, Mathf.Infinity, ~ignoreLayermask))
+				targetPoint = hit.point;
+			else
+				targetPoint = ray2.GetPoint(1000); // You may need to change this value according to your needs
+			position_update = gun_obj.position;
+			direction_update = (targetPoint - gun_obj.position).normalized;
+			
+			if (fireAction.IsPressed()/* && Vector3.Distance(prevPoint,targetPoint) >=.04f*/)
             {
 
 				Fire();
@@ -54,17 +69,37 @@ namespace StarterAssets
 				lineRenderer.enabled = false;
             }
 
-
+			//prevPoint=targetPoint;
 		}
+		//public void set_position_direction()
+  //      {
+		//	Ray ray2 = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
+		//	RaycastHit hit;
+		//	// Check whether your are pointing to something so as to adjust the direction
+		//	Vector3 targetPoint;
+		//	if (Physics.Raycast(ray2, out hit, Mathf.Infinity, ~ignoreLayermask))
+		//		targetPoint = hit.point;
+		//	else
+		//		targetPoint = ray2.GetPoint(1000); // You may need to change this value according to your needs
 
+		//	Debug.Log($"FOR THE RAY : {gun_obj.position},{(targetPoint - gun_obj.position).normalized}");
+
+		//	position_update = gun_obj.position;
+		//	direction_update = (targetPoint - gun_obj.position).normalized;
+		//}
 		void Fire()
 		{
+
+
+			Debug.Log($"FOR THE RAY : {gun_obj.position},{(targetPoint - gun_obj.position).normalized}");
+
+
 			lineRenderer.enabled = true;
-			ray = new Ray(gun_obj.position, gun_obj.forward); 
+			ray = new Ray(gun_obj.position, (targetPoint - gun_obj.position).normalized); 
 			//lineRenderer.material = a[0];
 			//lineRenderer.material.color = Color.HSVToRGB(1f, 1f, 1f); 
 			lineRenderer.positionCount = 1;
-			lineRenderer.SetPosition(0, gun_obj.position + gun_obj.forward * gun_obj.localScale.x);
+			lineRenderer.SetPosition(0, gun_obj.position + (targetPoint - gun_obj.position).normalized * gun_obj.localScale.x);
 			float remainingLength = maxLength;
 
 			for (int i = 0; i < reflections; i++)
@@ -91,7 +126,7 @@ namespace StarterAssets
 						ray = new Ray(hit.point, Vector3.Reflect(ray.direction, hit.normal));
 					}
 
-					if (hit.collider.tag == "LockWall")
+					if (hit.collider.tag == "LockWall" && LockPlatform.isOnPlayer)
 					{
 						//lineRenderer.material = a[1];
 						//if(lineRenderer.positionCount ==2 )
@@ -107,6 +142,12 @@ namespace StarterAssets
                     {
 						lineRenderer.material = Material_Array[2];
 						continue;
+
+					}
+					if (hit.collider.CompareTag("GravitySwitcher"))
+					{
+						lineRenderer.material = Material_Array[4];
+						break;
 
 					}
 					if (hit.collider.CompareTag("Mirror"))
@@ -125,7 +166,11 @@ namespace StarterAssets
 						break;
                     }
 				}
-				
+				else
+				{
+					lineRenderer.positionCount += 1;
+					lineRenderer.SetPosition(lineRenderer.positionCount - 1, ray.origin + ray.direction * remainingLength);
+				}
 			}
 		}
 		
