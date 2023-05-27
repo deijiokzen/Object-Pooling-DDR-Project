@@ -22,6 +22,7 @@ namespace StarterAssets
         public InputAction fireAction;
         float timer;
         bool bullet_lag;
+        int i = 0;
         [SerializeField]
         private float LagTime=1f;
         //private static bool hasHit = false;
@@ -39,7 +40,14 @@ namespace StarterAssets
 
         private GameObject createFunc()
         {
-            GameObject obj = Instantiate(projectile, gun_obj.position, gun_obj.rotation);
+
+            GameObject obj = i>5? m_projectilePool.Get():Instantiate(projectile, gun_obj.position, gun_obj.rotation);
+            if (i>5)
+            {
+                obj.transform.position = gun_obj.position;
+                obj.transform.rotation = gun_obj.rotation;
+            }
+            i++;
             obj.GetComponent<CollisionDetector>().SetPool(m_projectilePool);
             obj.layer = 2;
             return obj;
@@ -68,9 +76,10 @@ namespace StarterAssets
         {
             if(fireAction.IsPressed())
             {
-                if(bullet_lag)
+                //createFunc();
+                if (bullet_lag)
                 {
-                    if (Time.time-timer>= LagTime)
+                    if (Time.time - timer >= LagTime)
                     {
                         //Debug.Log($"Time: {Time.time} - {timer} = {Time.time-timer}");
                         bullet_lag = false;
@@ -80,7 +89,7 @@ namespace StarterAssets
                 else
                 {
                     AudioSource.PlayClipAtPoint(clip[0], transform.position);
-                    
+
                     createFunc();
                     //Debug.Log($"Bullet Lag Activated.");
                     bullet_lag = true;

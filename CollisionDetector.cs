@@ -91,10 +91,9 @@ namespace StarterAssets
                 turrentController.hit_position = transform.position;
                 cubefloat = false;
                
-                DestructedCube();
+                //DestructedCube();
                 AudioSource.PlayClipAtPoint(clip[0], transform.position);
-                gameObject.SetActive(false);
-                Invoke("Object_Release", 3f);
+                m_pool?.Release(gameObject);
 
             }
             
@@ -147,8 +146,7 @@ namespace StarterAssets
                     Physics.SyncTransforms();
 
                     AudioSource.PlayClipAtPoint(clip[0], transform.position);
-                    gameObject.SetActive(false);
-                    Invoke("Object_Release", 3f);
+                    m_pool?.Release(gameObject);
 
 
                 }
@@ -173,8 +171,7 @@ namespace StarterAssets
                     game_obj = hit.transform.gameObject;
                     game_obj.GetComponent<GravitySwitch>().GravityFlip();
                     AudioSource.PlayClipAtPoint(clip[4], transform.position);
-                    gameObject.SetActive(false);
-                    Invoke("Object_Release", 3f);
+                    m_pool?.Release(gameObject);
 
 
                 }
@@ -184,11 +181,10 @@ namespace StarterAssets
             {
                 if (Vector3.Distance(GetComponent<Renderer>().bounds.center, hit.point) <= 0.6f)
                 {
-                    DestructedCube();
+                    //DestructedCube();
                     Destroy(hit.transform.gameObject);
                     AudioSource.PlayClipAtPoint(clip[2], starter_position);
-                    gameObject.SetActive(false);
-                    Invoke("Object_Release", 3f);
+                    m_pool?.Release(gameObject);
 
 
                 }
@@ -222,9 +218,7 @@ namespace StarterAssets
                         dice_obj.GetComponent<Collider>().enabled = false;
                         dice_obj.GetComponent<Collider>().enabled = true;
                         AudioSource.PlayClipAtPoint(clip[3], starter_position);
-                        gameObject.SetActive(false);
-                        Invoke("Object_Release", 3f);
-
+                        m_pool?.Release(gameObject);
 
                         //GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
                         //cube.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
@@ -242,10 +236,9 @@ namespace StarterAssets
                     {
                         turrentController.hit_detected = true;
                         turrentController.hit_position = transform.position;
-                        DestructedCube();
+                        //DestructedCube();
                         AudioSource.PlayClipAtPoint(clip[0], transform.position);
-                        gameObject.SetActive(false);
-                        Invoke("Object_Release", 3f);
+                        m_pool?.Release(gameObject);
                         //m_pool?.Release(gameObject);
                     }
                 }
@@ -255,10 +248,7 @@ namespace StarterAssets
 
 
         }
-        private void Object_Release()
-        {
-            m_pool?.Release(gameObject);
-        }
+
         private void Reflector()
         {
 
